@@ -32,18 +32,26 @@ class FusionEKF {
   KalmanFilter ekf_;
 
  private:
+   void initializeWithRADAR(Eigen::VectorXd &measurements);
+   void initializeWithLIDAR(Eigen::VectorXd &measurements);
+   void updateSamplingTime(long long timestamp);
+   void updateFMatrix();
+   void updateQMatrix();
+
+
   // check whether the tracking toolbox was initialized or not (first measurement)
   bool is_initialized_;
 
   // previous timestamp
   long long previous_timestamp_;
+  float samplingTime;
 
   // tool object used to compute Jacobian and RMSE
   Tools tools;
   Eigen::MatrixXd R_laser_;
   Eigen::MatrixXd R_radar_;
   Eigen::MatrixXd H_laser_;
-  Eigen::MatrixXd Hj_;
+  Eigen::MatrixXd Hj_; // extracted from getJacobian from tools
 };
 
 #endif // FusionEKF_H_
